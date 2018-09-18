@@ -28,8 +28,8 @@ def main():
  os.system("ssh root@backup_db rm -rf /srv/database/data/*")
  os.system("barman recover --target-time \"%s 09:30\"  --remote-ssh-command \"ssh root@backup_db\" db1 %s /srv/database/data/" %(today, toda1) )
  os.system("ssh root@backup_db cp /srv/postgresql.conf /srv/database/data/")
- os.system("ssh root@backup_db cp /srv/pg_hba* /srv/canvera/pg_9.2/")
- os.system("ssh root@backup_db chown -R postgres /srv/canvera/pg_9.2/")
+ os.system("ssh root@backup_db cp /srv/pg_hba* /srv/database/data/")
+ os.system("ssh root@backup_db chown -R postgres /srv/database/data/")
  os.system("ssh -f root@backup_db \'su -s /bin/bash -c \"/usr/local/pgsql/bin/pg_ctl start -D /srv/database/data\" postgres \' ")
  time.sleep(60)
  conn_string = "host='backup_db' user='readonly' dbname='db1' password='readonly' port=5432" 
@@ -43,7 +43,7 @@ def main():
  cursor.close()
  conn.close()
 
- conn_string1 = "host='prod_db' user='readonly' dbname='canvera' password='readonly' port=5432"
+ conn_string1 = "host='prod_db' user='readonly' dbname='db1' password='readonly' port=5432"
  conn1 = psycopg2.connect(conn_string1)
  conn1.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
  cursor1 = conn1.cursor()
